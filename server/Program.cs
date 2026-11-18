@@ -16,7 +16,7 @@ namespace Server
         {
             TcpListener listener = new TcpListener(IPAddress.Loopback, PORTA);
             listener.Start();
-            Console.WriteLine("Server in ascolto sulla porta " + PORTA + "...");
+            Console.WriteLine("Server In ascolto sulla porta " + PORTA + "...");
 
             while (true)
             {
