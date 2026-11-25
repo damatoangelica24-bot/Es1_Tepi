@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-//DEVO CREARE UN NUOVO THREAD, PER USARE 2 CLIENT
+//DEVO CREARE UN NUOVO THREAD, (COME SE USASSI 2 CLIENT)
 
 namespace Server
 {
@@ -24,16 +24,12 @@ namespace Server
             while (true)
             {
                 // Bloccante: attende che un client si connetta
-                using (TcpClient client = listener.AcceptTcpClient())
-                {
-                    Console.WriteLine("Client connesso: " + client.Client.RemoteEndPoint);
-                    
-                    //Thread thread = new Thread(() => ElaboraUtente(utente));
-                    Thread thread = new Thread(() => EseguiLavoro(client));
-                    thread.Start(); // Avvia il thread
-                    thread.Join(); // Stiamo dicendo al thread di aspettare, non ha molto senso...
-                    Console.WriteLine("Client disconnesso.");
-                }
+                TcpClient client = listener.AcceptTcpClient();
+                Console.WriteLine("Client connesso: " + client.Client.RemoteEndPoint);
+                Thread thread = new Thread(() => EseguiLavoro(client));
+                thread.Start(); // Avvia il thread
+                //thread.Join(); // Stiamo dicendo al thread di aspettare, non ha molto senso...
+                Console.WriteLine("Client disconnesso.");
             }
         }
         static void EseguiLavoro(TcpClient client)
