@@ -4,6 +4,9 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+
+//DEVO CREARE UN NUOVO THREAD, PER USARE 2 CLIENT
 
 namespace Server
 {
@@ -24,8 +27,21 @@ namespace Server
                 using (TcpClient client = listener.AcceptTcpClient())
                 {
                     Console.WriteLine("Client connesso: " + client.Client.RemoteEndPoint);
-
-                    using (NetworkStream stream = client.GetStream())
+                    
+                    //Thread thread = new Thread(() => ElaboraUtente(utente));
+                    Thread thread = new Thread(() => EseguiLavoro(client));
+                    thread.Start(); // Avvia il thread
+                    thread.Join(); // Stiamo dicendo al thread di aspettare, non ha molto senso...
+                    Console.WriteLine("Client disconnesso.");
+                }
+            }
+        }
+        static void EseguiLavoro(TcpClient client)
+        {
+            using (client)
+            {
+                Console.WriteLine("Lavoro in esecuzione su un nuovo thread.");
+                using (NetworkStream stream = client.GetStream())
                     {
                         using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
                         {
@@ -49,10 +65,9 @@ namespace Server
                             }
                         }
                     }
-
-                    Console.WriteLine("Client disconnesso.");
-                }
             }
+            
         }
     }
+    
 }
